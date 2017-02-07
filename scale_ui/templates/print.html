@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Print Timbang</title>
+	<style type="text/css">
+		* {
+			font-family: "courier new", monospace, monotype;
+			font-weight: 900;
+			font-size: 11px;
+		}
+		.fix-table {
+			table-layout: fixed;
+			width: 100%;
+		}
+		.fix-table td {
+			vertical-align: top;
+		}
+	</style>
+	<script type="text/javascript">
+		window.print();
+	</script>
+</head>
+<body>
+	<h1>PT. SEMEN INDONESIA BETON</h1>
+	<h2>No.{{ id }}</h2>
+	<table class="fix-table" cellspacing="0" cellpadding="0">
+		<tbody>
+			<tr>
+				<td style="width: 200px;">Nomor Polisi</td>
+				<td style="width: 10px;">:</td>
+				<td>{{ nopol }}</td>
+				<td style="width: 10px;">&nbsp;</td>
+				<td style="width: 200px;">Nomor PO</td>
+				<td style="width: 10px;">:</td>
+				<td>{{ c_order }}</td>
+			</tr>
+			<tr>
+				<td>Nomor SPJ</td>
+				<td>:</td>
+				<td>{{ spj }}</td>
+				<td>&nbsp;</td>
+				<td>Produk</td>
+				<td>:</td>
+				<td>{{ c_orderline }}</td>
+			</tr>
+		</tbody>
+	</table>
+	<hr />
+	<table class="fix-table" cellspacing="0" cellpadding="0">
+		<tbody>
+			<tr>
+				<td style="width: 200px;">Waktu Masuk</td>
+				<td style="width: 10px;">:</td>
+				<td>{{ date_in }}</td>
+				<td style="width: 10px;">&nbsp;</td>
+				<td style="width: 200px;">Berat Isi</td>
+				<td style="width: 10px;">:</td>
+				<td style="text-align: right;">{{ weight_in }} {{ c_uom }}</td>
+			</tr>
+			<tr>
+				<td>Waktu Keluar</td>
+				<td>:</td>
+				<td>{{ date_out }}</td>
+				<td>&nbsp;</td>
+				<td>Berat Kosong</td>
+				<td>:</td>
+				<td style="text-align: right;">{{ weight_out }} {{ c_uom }}</td>
+			</tr>
+			<tr>
+				<td>Kadar Air (%)</td>
+				<td>:</td>
+				<td>{{ kadar }}</td>
+				<td>&nbsp;</td>
+				<td>Berat Bersih</td>
+				<td>:</td>
+				<td style="border-top: 1px solid black; text-align: right;">
+					{{ weight }} {{ c_uom }}
+				</td>
+			</tr>
+			<tr>
+				<td>Kadar Air Max (%)</td>
+				<td>:</td>
+				<td>{{ kadar_max }}</td>
+				<td>&nbsp;</td>
+				<td>Potongan Mutu</td>
+				<td>:</td>
+				<td style="text-align: right;">{{ potong }} {{ c_uom }}</td>
+			</tr>
+			<tr>
+				<td>Petugas</td>
+				<td>:</td>
+				<td>{{ ad_user }}</td>
+				<td>&nbsp;</td>
+				<td>Berat Real</td>
+				<td>:</td>
+				<td style="border-top: 1px solid black; text-align: right;">
+					{{ weight_real }} {{ c_uom }}
+				</td>
+			</tr>
+			{% if wspj %}
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>Berat SPJ</td>
+				<td>:</td>
+				<td style="border-top: 1px solid black; text-align: right;">
+					{{ wspj }} {{ c_uom_po }}
+				</td>
+			</tr>
+			{% endif %}
+		</tbody>
+	</table>
+	<hr />
+	<table class="fix-table" cellspacing="0" cellpadding="0">
+		<tbody>
+			<tr>
+				<td style="text-align: center;">Ditimbang</td>
+				<td style="text-align: center;">Diperiksa</td>
+			</tr>
+			<tr>
+				<td style="text-align: center; height: 40px;">&nbsp;</td>
+				<td style="text-align: center; height: 40px;">&nbsp;</td>
+			</tr>
+			<tr>
+				<td style="text-align: center;">(_______________)</td>
+				<td style="text-align: center;">(_______________)</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

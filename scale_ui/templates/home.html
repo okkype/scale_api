@@ -1,0 +1,310 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %} - {{ ad_user__name }}{% endblock %}
+{% block header %} - {{ ad_user__name }}{% endblock %}
+{% block script %}
+var zcount = 0;
+$(function() {
+	$(".se-pre-con").fadeIn();
+	$.post('{% url 'getPO' %}', {
+		'csrfmiddlewaretoken' : '{{ csrf_token }}'
+	}).done(function(data) {
+		$('#post_po').html('<option value="">-- Select PO --</option>' + data);
+		$(".se-pre-con").fadeOut();
+	});
+	$('#post_po').change(function() {
+		$(".se-pre-con").fadeIn();
+		$.post('{% url 'getPOLine' %}', {
+			'csrfmiddlewaretoken' : '{{ csrf_token }}',
+			'post_po' : $('#post_po').val()
+		}).done(function(data) {
+			$('#post_po_line').html('<option value="">-- Select Line --</option>' + data);
+			$(".se-pre-con").fadeOut();
+		});
+	});
+   	$('#post_nopol').keyup(function() {
+   		$('#post_nopol').val($('#post_nopol').val().toUpperCase().replace(/[^a-z0-9]/gi,''));
+   	});
+	$('#post_nopol').autocomplete({
+   		source: '{% url 'getNopol' %}'
+   	});
+   	$('#btn_timbang').click(function() {
+   		if ($('#post_docstatus').val() == 'IN') {
+			$('#post_weight_out').val($('#scaleval').html());
+			$.get('{% url 'getDateTime' %}', {}, function(data) {
+				$('#post_date_out').val(data);
+			});
+		} else {
+			$('#post_weight_in').val($('#scaleval').html());
+			$.get('{% url 'getDateTime' %}', {}, function(data) {
+				$('#post_date_in').val(data);
+			});
+		}
+   	});
+});
+function validate() {
+	if ($('#post_weight').val() < 0) {
+		alert('Berat Tidak Valid');
+		return false;
+	} else {
+		return true;
+	}
+}
+window.setInterval(function() {
+	$('#post_weight').val(parseFloat($('#post_weight_in').val()) - parseFloat($('#post_weight_out').val()));
+	if(parseFloat($('#post_kadar').val()) > parseFloat($('#post_kadar_max').val())) {
+		$('#post_potong').val(parseFloat($('#post_weight').val()) * (parseFloat($('#post_kadar').val()) - parseFloat($('#post_kadar_max').val())) / 100.0);
+	} else {
+		$('#post_potong').val(0);
+	}
+	$('#post_real').val(parseFloat($('#post_weight').val()) - parseFloat($('#post_potong').val()));
+}, 100);
+function cekTimbang() {
+	$.get('{{ scale_address|safe }}', function(data, status) {
+		if (status==='success') {
+			// $('#scaleval').html(data.value);
+			if (data.value===0) {
+				if (zcount>1) {
+					$('#scaleval').html(data.value);
+				}
+				zcount++;
+			} else {
+				$('#scaleval').html(data.value);
+				zcount = 0;
+			}
+		}
+		window.setTimeout(cekTimbang, 100);
+	});
+}
+window.setTimeout(cekTimbang, 100);
+window.setInterval(function() {
+	$.post('{% url 'getTimbangNopol' %}', {
+		'csrfmiddlewaretoken' : '{{ csrf_token }}',
+		'post_nopol' : $('#post_nopol').val()
+	}).done(function(data) {
+		// $('#post_id').val(data.post_id);
+		// $('#post_date_in').prop('readonly',true);
+		// $('#post_weight_in').prop('readonly',true);
+		// $('#post_date_out').prop('readonly',false);
+		// $('#post_weight_out').prop('readonly',false);
+		// $('#post_kadar').val(data.post_kadar);
+		$('#post_kadar_max').val(data.post_kadar_max);
+		
+		$('#post_nopol').prop('readonly',true);
+		$('#post_spj').val(data.post_spj);
+		$('#post_spj').prop('readonly',true);
+		$('#post_wspj').val(data.post_wspj);
+		$('#post_wspj').prop('readonly',true);
+		$('#post_po').val(data.post_po);
+		$('#post_po').prop('readonly',true);
+		$('#post_po_line').val(data.post_po_line);
+		$('#post_po_line').prop('readonly',true);
+		$('#post_docstatus').val(data.post_docstatus);
+		
+		if ($('#post_docstatus').val() == 'IN') {
+			$('#post_date_in').val(data.post_date_in);
+			$('#post_weight_in').val(data.post_weight_in);
+			$('#post_kadar').prop('readonly',false);
+			// $('#post_kadar_max').prop('readonly',false);
+		}
+		
+		$('#form_po').remove();
+		$('#form_nopol').removeClass('col-md-6');
+		$('#form_nopol').addClass('col-md-12');
+	});
+}, 500);
+{% if error %}
+alert('{{ error }}');
+{% endif %}
+{% if print %}
+window.open("{% url 'print' %}");
+{% endif %}
+{% endblock %}
+{% block container %}
+<div class="row">
+	<div class="col-md-12">
+		<h4>
+			<u>{{ ad_client__name }}</u> / <u>{{ ad_org__name }}</u> / <u>{{ m_warehouse__name }}</u>
+		</h4>
+	</div>
+</div>
+<div class="row">
+	<form class="form-horizontal" role="form" method="post" action="{% url 'setTimbang' %}" onsubmit="return validate();">
+		{% csrf_token %}
+		<!-- <input type="hidden" name="post_id" id="post_id" /> -->
+		<div class="col-md-6" id="form_nopol">
+			<div class="form-group">
+				<div class="col-sm-2">
+					<label for="post_nopol" class="control-label">No Polisi</label>
+				</div>
+				<div class="col-sm-10">
+					<input required="required" type="text" class="form-control" id="post_nopol" name="post_nopol">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2">
+					<label for="post_spj" class="control-label">No SPJ</label>
+				</div>
+				<div class="col-sm-4">
+					<input required="required" type="text" class="form-control" id="post_spj" name="post_spj">
+				</div>
+				<div class="col-sm-2">
+					<label for="post_wspj" class="control-label">Brt SPJ</label>
+				</div>
+				<div class="col-sm-4">
+					<input required="required" type="number" step="0.01" value="0" class="form-control" id="post_wspj" name="post_wspj">
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6" id="form_po">
+			<div class="form-group">
+				<div class="col-sm-3">
+					<label for="post_po" class="control-label">No PO</label>
+				</div>
+				<div class="col-sm-9">
+					<select required="required" class="form-control select2" name="post_po" id="post_po">
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-3">
+					<label for="post_po_line" class="control-label">Product</label>
+				</div>
+				<div class="col-sm-9">
+					<select required="required" class="form-control select2" name="post_po_line" id="post_po_line">
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<h1 id="scaleval" style="text-align: center; font-family: dseg7;">0</h1>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				<div class="col-sm-3">
+					<label for="post_date_in" class="control-label">Waktu Masuk</label>
+				</div>
+				<div class="col-sm-9">
+					<input type="text" readonly="readonly" class="form-control" id="post_date_in" name="post_date_in">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-3">
+					<label for="post_date_out" class="control-label">Waktu Keluar</label>
+				</div>
+				<div class="col-sm-9">
+					<input type="text" readonly="readonly" class="form-control" id="post_date_out" name="post_date_out">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-3">
+					<label for="post_docstatus" class="control-label">Doc Status</label>
+				</div>
+				<div class="col-sm-9">
+					<input type="text" readonly="readonly" class="form-control" id="post_docstatus" name="post_docstatus">
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				<div class="col-sm-3">
+					<label for="post_weight_in" class="control-label">Berat Isi</label>
+				</div>
+				<div class="col-sm-9">
+					<input type="number" readonly="readonly" step="0.01" value="0" class="form-control" id="post_weight_in" name="post_weight_in">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-3">
+					<label for="post_weight_out" class="control-label">Berat Kosong</label>
+				</div>
+				<div class="col-sm-9">
+					<input type="number" readonly="readonly" step="0.01" value="0" class="form-control" id="post_weight_out" name="post_weight_out">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-3">
+					<label for="post_weight" class="control-label">Berat Bersih</label>
+				</div>
+				<div class="col-sm-9">
+					<input type="number" readonly="readonly" value="0" step="0.01" class="form-control" id="post_weight" name="post_weight">
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<hr />
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				<div class="col-sm-4">
+					<label for="post_kadar" class="control-label">Kadar Air (%)</label>
+				</div>
+				<div class="col-sm-8">
+					<input type="number" readonly="readonly" step="0.01" value="0" class="form-control" id="post_kadar" name="post_kadar">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-4">
+					<label for="post_kadar_max" class="control-label">Kadar Air Max (%)</label>
+				</div>
+				<div class="col-sm-8">
+					<input type="number" readonly="readonly" step="0.01" value="0" class="form-control" id="post_kadar_max" name="post_kadar_max">
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				<div class="col-sm-3">
+					<label for="post_potong" class="control-label">Potongan Mutu</label>
+				</div>
+				<div class="col-sm-9">
+					<input type="number" readonly="readonly" step="0.01" value="0" class="form-control" id="post_potong" name="post_potong">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-3">
+					<label for="post_real" class="control-label">Berat Real</label>
+				</div>
+				<div class="col-sm-9">
+					<input type="number" readonly="readonly" step="0.01" value="0" class="form-control" id="post_real" name="post_real">
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<hr />
+		</div>
+		<div class="col-md-12">
+			<input type="button" name="btn_timbang" id="btn_timbang" class="btn btn-block" value="Timbang">
+		</div>
+		<div class="col-md-12">
+			<br />
+		</div>
+		<div class="col-md-6">
+			<input type="submit" class="btn btn-block" value="Submit">
+		</div>
+		<div class="col-md-6">
+			<input type="reset" class="btn btn-block btn_reload" value="Reset">
+		</div>
+		<div class="col-md-12">
+			<br />
+            <table class="table dynatable">
+				<thead>
+					<tr>
+						<th>No</th>
+						<th>Waktu Masuk</th>
+						<th>No Polisi</th>
+						<th>No SPJ</th>
+						<th>No PO</th>
+						<th>Vendor</th>
+						<th>Berat Masuk</th>
+						<th>Hapus</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{ intransit|safe }}
+				</tbody>
+            </table>
+		</div>
+	</form>
+</div>
+{% endblock %}

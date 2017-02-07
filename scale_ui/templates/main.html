@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block script %}
+{% if error %}
+alert('{{ error }}');
+{% endif %}
+{% if print %}
+window.open("/print/");
+{% endif %}
+{% endblock %}
+{% block navbar %}
+	<li><a href="{% url 'index' %}">Home</a></li>
+	<!-- li><a href="http://localhost:8000/">Offline</a></li -->
+	<li><a href="{% url 'history' %}">Riwayat</a></li>
+	<li><a href="{% url 'corderline_list' %}">List PO</a></li>
+	<li><a href="{% url 'manual' %}">Bantuan</a></li>
+	<li><a href="{% url 'logout' %}">Logout</a></li>
+{% endblock %}
+{% block container %}{% endblock %}

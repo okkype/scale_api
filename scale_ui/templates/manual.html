@@ -1,0 +1,170 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %} - Bantuan{% endblock %}
+{% block header %} - Bantuan{% endblock %}
+{% block container %}
+<style type="text/css">
+	li img {
+		width: 400px;
+	}
+</style>
+<div class="row">
+	<div class="col-md-12">
+		<h2 id="help">Petunjuk Penggunaan Aplikasi Timbang</h2>
+		<ul>
+			<li><a href="#help1">Installasi dan Inisialisasi API (Di Komputer Lokal)</a></li>
+			<li><a href="#help2">Konfigurasi UI Timbang</a></li>
+			<li>
+				<a href="#help3">Memulai UI Timbang</a>
+				<ul>
+					<li><a href="#help3_1">Memulai UI Timbang tanpa QC</a></li>
+					<li><a href="#help3_2">Memulai UI Timbang dengan QC</a></li>
+				</ul>
+			</li>
+		</ul>
+		<h3 id="help1">Installasi dan Inisialisasi API (Di Komputer Lokal)</h3>
+		<p>
+			<ol>
+				<li>
+					Ekstrak file win32.zip, buka command, kemudian ketik <code>cd [LOKASI_EKSTRAK]</code><br />
+					<!-- <a target="_blank" href="{% static 'img/manual/1.png' %}" /><img src="{% static 'img/manual/1.png' %}" /></a> -->
+					<a target="_blank" href="{% static 'img/manual/2.png' %}" /><img src="{% static 'img/manual/2.png' %}" /></a>
+					<br />
+				</li>
+				<li>
+					Ketik <code>Scripts\activate</code><br />
+					<a target="_blank" href="{% static 'img/manual/3.png' %}" /><img src="{% static 'img/manual/3.png' %}" /></a>
+					<br />
+				</li>
+				<li>
+					Ketik <code>python scale_api\manage.py runserver 0.0.0.0:8000</code><br />
+					<a target="_blank" href="{% static 'img/manual/4.png' %}" /><img src="{% static 'img/manual/4.png' %}" /></a>
+					<br />
+				</li>
+				<li>
+					Apabila tidak terjadi error, buka web browser, buka <code>http://localhost:8000/admin/</code><br />
+					<a target="_blank" href="{% static 'img/manual/5.png' %}" /><img src="{% static 'img/manual/5.png' %}" /></a>
+					<br />
+				</li>
+				<li>
+					Klik link "Scale Configs" untuk mengubah pengaturan<br />
+					<a target="_blank" href="{% static 'img/manual/6.png' %}" /><img src="{% static 'img/manual/6.png' %}" /></a>
+					<br />
+				</li>
+			</ol>
+			<a href="#help">Menu</a>
+		</p>
+		<h3 id="help2">Konfigurasi UI Timbang</h3>
+		<p>
+			<ol>
+				<li>
+					Buka web browser, buka <code>http://[IP_SERVER]:8000/</code><br />
+					<a target="_blank" href="{% static 'img/manual/7.png' %}" /><img src="{% static 'img/manual/7.png' %}" /></a>
+					<br />
+				</li>
+				<li>
+					Klik link "Setting"<br />
+					<a target="_blank" href="{% static 'img/manual/8.png' %}" /><img src="{% static 'img/manual/8.png' %}" /></a>
+					<br />
+				</li>
+				<li>
+					Klik link "Scale Configs"<br />
+					<a target="_blank" href="{% static 'img/manual/9.png' %}" /><img src="{% static 'img/manual/9.png' %}" /></a>
+					<br />
+				</li>
+			</ol>
+			<a href="#help">Menu</a>
+		</p>
+		<h3 id="help3">Memulai UI Timbang</h3>
+		<p>
+			<ol>
+				<li>
+					Buka web browser, buka <code>http://[IP_SERVER]:8000/</code>, kemudian login<br />
+					<a target="_blank" href="{% static 'img/manual/7.png' %}" /><img src="{% static 'img/manual/7.png' %}" /></a>
+					<br />
+				</li>
+				<li>
+					Pilih Role<br />
+					<a target="_blank" href="{% static 'img/manual/10.png' %}" /><img src="{% static 'img/manual/10.png' %}" /></a>
+					<br />
+				</li>
+			</ol>
+			<a href="#help">Menu</a>
+		</p>
+		<h3 id="help3_1">Memulai UI Timbang tanpa QC</h3>
+		<p>
+			<ol>
+				<li>
+					Isi dan lengkapi form<br />
+					<a target="_blank" href="{% static 'img/manual/7.png' %}" /><img src="{% static 'img/manual/7.png' %}" /></a>
+					<br />
+				</li>
+				<li>
+					Klik "Timbang" untuk mengisi otomatis Timbang Masuk<br />
+					<a target="_blank" href="{% static 'img/manual/11.png' %}" /><img src="{% static 'img/manual/11.png' %}" /></a>
+					<br />
+				</li>
+				<li>
+					Klik "Submit" untuk menyimpan data Timbang Masuk<br />
+					<a target="_blank" href="{% static 'img/manual/12.png' %}" /><img src="{% static 'img/manual/12.png' %}" /></a>
+					<br />
+				</li>
+				<li>
+					Pada saat Timbang Keluar, ketik nomor plat kendaraan, atau klik nomor kendaraan yang ada di tabel bawah<br />
+					<a target="_blank" href="{% static 'img/manual/13.png' %}" /><img src="{% static 'img/manual/13.png' %}" /></a>
+					<br />
+				</li>
+				<li>
+					Klik "Timbang" untuk mengisi otomatis Timbang Keluar<br />
+					<a target="_blank" href="{% static 'img/manual/14.png' %}" /><img src="{% static 'img/manual/14.png' %}" /></a>
+					<br />
+				</li>
+				<li>
+					Klik "Submit" untuk menyimpan data Timbang Keluar
+					(<a target="_blank" href="{% static 'img/manual/print_timbang.pdf' %}" />Contoh Hasil Print</a>)<br />
+					<a target="_blank" href="{% static 'img/manual/15.png' %}" /><img src="{% static 'img/manual/15.png' %}" /></a>
+					<br />
+				</li>
+			</ol>
+			<a href="#help">Menu</a>
+		</p>
+		<h3 id="help3_2">Memulai UI Timbang dengan QC</h3>
+		<p>
+			<ol>
+				<li>
+					Pada saat QC menyimpan data QC, otomatis akan muncul di tabel bawah, ketik nomor plat kendaraan, atau klik nomor kendaraan yang ada di tabel bawah<br />
+					<a target="_blank" href="{% static 'img/manual/11.png' %}" /><img src="{% static 'img/manual/11.png' %}" /></a>
+					<br />
+				</li>
+				<li>
+					Klik "Timbang" untuk mengisi otomatis Timbang Masuk<br />
+					<a target="_blank" href="{% static 'img/manual/11.png' %}" /><img src="{% static 'img/manual/11.png' %}" /></a>
+					<br />
+				</li>
+				<li>
+					Klik "Submit" untuk menyimpan data Timbang Masuk<br />
+					<a target="_blank" href="{% static 'img/manual/12.png' %}" /><img src="{% static 'img/manual/12.png' %}" /></a>
+					<br />
+				</li>
+				<li>
+					Pada saat Timbang Keluar, ketik nomor plat kendaraan, atau klik nomor kendaraan yang ada di tabel bawah<br />
+					<a target="_blank" href="{% static 'img/manual/13.png' %}" /><img src="{% static 'img/manual/13.png' %}" /></a>
+					<br />
+				</li>
+				<li>
+					Klik "Timbang" untuk mengisi otomatis Timbang Keluar<br />
+					<a target="_blank" href="{% static 'img/manual/14.png' %}" /><img src="{% static 'img/manual/14.png' %}" /></a>
+					<br />
+				</li>
+				<li>
+					Klik "Submit" untuk menyimpan data Timbang Keluar
+					(<a target="_blank" href="{% static 'img/manual/print_timbang.pdf' %}" />Contoh Hasil Print</a>)<br />
+					<a target="_blank" href="{% static 'img/manual/15.png' %}" /><img src="{% static 'img/manual/15.png' %}" /></a>
+					<br />
+				</li>
+			</ol>
+			<a href="#help">Menu</a>
+		</p>
+	</div>
+</div>
+{% endblock %}

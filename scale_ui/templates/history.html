@@ -1,0 +1,52 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %} - Riwayat{% endblock %}
+{% block header %} - Riwayat{% endblock %}
+{% block script %}
+{% if error %}
+alert('{{ error }}');
+{% endif %}
+{% endblock %}
+{% block container %}
+<div class="row">
+	<div class="col-md-12">
+		Filter by :
+		<a href="{% url 'history' %}" class="btn btn-default">Tampil Semua</a>
+		<a href="{% url 'history' 'reprocess' %}" class="btn btn-default">Belum Complete</a>
+		<a href="{% url 'history' 'resend' %}" class="btn btn-default">Belum Terkirim</a>
+	</div>
+	<hr />
+	{% if resend %}
+	<div class="col-md-12">
+		Action :
+		{% if reprocess %}
+		<a href="{% url 'history' 'reprocess' 'all' %}" class="btn btn-default">Re-Process All</a>
+		{% endif %}
+		{% if resend %}
+		<a href="{% url 'history' 'resend' 'all' %}" class="btn btn-default">Re-Send All</a>
+		{% endif %}
+	</div>
+	{% endif %}
+	<div class="col-md-12">
+		<br />
+		<table class="table dynatable">
+			<thead>
+				<tr>
+					<th>No</th>
+					<th>Waktu Masuk</th>
+					<th>Waktu Keluar</th>
+					<th>No Polisi</th>
+					<th>No SPJ</th>
+					<th>No PO</th>
+					<th>Vendor</th>
+					<th>Berat Masuk</th>
+					<th>Berat Keluar</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>{{ intransit|safe }}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load scale_ui_filters %}
+{% block title %} - List PO{% endblock %}
+{% block header %} - List PO{% endblock %}
+{% block script %}
+{% if error %}
+alert('{{ error }}');
+{% endif %}
+{% endblock %}
+{% block container %}
+<div class="row">
+	<div class="col-md-12">
+		<br />
+		<table class="table dynatable">
+			<thead>
+				<tr>
+					<th>Document No</th>
+					<th>Date Ordered</th>
+					<th>Date Promised</th>
+					<th>Vendor</th>
+					<th>Product</th>
+					<th>Qty Sisa</th>
+					<th>UOM</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for object in object_list %}
+				<tr>
+					<td>{{ object.c_order.documentno }}</td>
+					<td>{{ object.c_order.dateordered|date:'d/M/Y'|upper }}</td>
+					<td>{{ object.c_order.datepromised|date:'d/M/Y'|upper }}</td>
+					<td>{{ object.c_order.c_bpartner.name }}</td>
+					<td>{{ object.m_product.name }}</td>
+					<td>
+						<div style="display: block; text-align: right;">{{ object.qtyreserved|format_float }}</div>
+					</td>
+					<td>{{ object.m_product.c_uom.uomsymbol }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class="col-md-12">
+		<a href="{% url 'role2' %}" class="btn btn-default btn-block">Sinkron PO</a>
+	</div>
+</div>
+{% endblock %}

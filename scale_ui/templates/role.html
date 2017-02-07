@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} - Select Role{% endblock %}
+{% block header %} - Select Role{% endblock %}
+{% block script %}
+$(function() {
+	$('#post_locator').change(function() {
+		$(".se-pre-con").fadeIn();
+		$.post('/get/locator/', {
+			'csrfmiddlewaretoken' : '{{ csrf_token }}',
+			'post_client' : $('#post_client').val(),
+			'post_org' : $('#post_org').val(),
+			'post_wh' : $('#post_wh').val()
+		}).done(function(data) {
+			$('#post_locator').html(data);
+			$(".se-pre-con").fadeOut();
+		});
+	});
+	$('#post_org').change(function() {
+		$(".se-pre-con").fadeIn();
+		$.post('/get/wh/', {
+			'csrfmiddlewaretoken' : '{{ csrf_token }}',
+			'post_client' : $('#post_client').val(),
+			'post_org' : $('#post_org').val()
+		}).done(function(data) {
+			$('#post_wh').html(data);
+			$('#post_locator').change();
+			$(".se-pre-con").fadeOut();
+		});
+	});
+	$('#post_role').change(function() {
+		$(".se-pre-con").fadeIn();
+		$.post('/get/org/', {
+			'csrfmiddlewaretoken' : '{{ csrf_token }}',
+			'post_client' : $('#post_client').val(),
+			'post_role' : $('#post_role').val()
+		}).done(function(data) {
+			$('#post_org').html(data);
+			$('#post_org').change();
+			$(".se-pre-con").fadeOut();
+		});
+	});
+	$('#post_client').change(function() {
+		$(".se-pre-con").fadeIn();
+		$.post('/get/role/', {
+			'csrfmiddlewaretoken' : '{{ csrf_token }}',
+			'post_client' : $('#post_client').val()
+		}).done(function(data) {
+			$('#post_role').html(data);
+			$('#post_role').change();
+			$(".se-pre-con").fadeOut();
+		});
+		$(".se-pre-con").fadeIn();
+		$.post('/get/doctype/', {
+			'csrfmiddlewaretoken' : '{{ csrf_token }}',
+			'post_client' : $('#post_client').val()
+		}).done(function(data) {
+			$('#post_doctype').html(data);
+			$(".se-pre-con").fadeOut();
+		});
+		$(".se-pre-con").fadeIn();
+		$.post('/get/uom/', {
+			'csrfmiddlewaretoken' : '{{ csrf_token }}',
+			'post_client' : $('#post_client').val()
+		}).done(function(data) {
+			$('#post_uom').html(data);
+			$(".se-pre-con").fadeOut();
+		});
+	});
+});
+{% if error %}
+alert('{{ error }}');
+{% endif %}
+{% endblock %}
+{% block navbar %}
+	<li><a href="/logout/">Logout</a></li>
+{% endblock %}
+{% block container %}
+<div class="row">
+	<div class="col-md-12">
+		<form role="form" method="post" action="/role/">{% csrf_token %}
+			<div class="form-group">
+				<label class="control-label" for="post_client">Client</label>
+				<select required="required" class="form-control select2" name="post_client" id="post_client">
+					{{ ad_client_opt|safe }}
+				</select>
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="post_role">Role</label>
+				<select required="required" class="form-control select2" name="post_role" id="post_role">
+					{{ ad_role_opt|safe }}
+				</select>
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="post_org">Organisation</label>
+				<select required="required" class="form-control select2" name="post_org" id="post_org">
+					{{ ad_org_opt|safe }}
+				</select>
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="post_wh">Warehouse</label>
+				<select required="required" class="form-control select2" name="post_wh" id="post_wh">
+					{{ m_warehouse_opt|safe }}
+				</select>
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="post_locator">Locator</label>
+				<select required="required" class="form-control select2" name="post_locator" id="post_locator">
+					{{ m_locator_opt|safe }}
+				</select>
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="post_doctype">Doc Type</label>
+				<select required="required" class="form-control select2" name="post_doctype" id="post_doctype">
+					{{ c_doctype_opt|safe }}
+				</select>
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="post_uom">UoM</label>
+				<select required="required" class="form-control select2" name="post_uom" id="post_uom">
+					{{ c_uom_opt|safe }}
+				</select>
+			</div>
+			<button type="submit" class="btn btn-default">Submit</button>
+		</form>
+	</div>
+</div>
+{% endblock %}
