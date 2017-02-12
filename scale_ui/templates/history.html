@@ -16,7 +16,7 @@ alert('{{ error }}');
 		<a href="{% url 'history' 'resend' %}" class="btn btn-default">Belum Terkirim</a>
 	</div>
 	<hr />
-	{% if resend %}
+	{% if resend or reprocess %}
 	<div class="col-md-12">
 		Action :
 		{% if reprocess %}
