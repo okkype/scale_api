@@ -1,0 +1,9 @@
+[
+	{
+		"model":"scale_api.scaleconfig",
+		"fields":{
+			"name":"scale_address",
+			"value":"/api/"
+		}
+	}
+]
